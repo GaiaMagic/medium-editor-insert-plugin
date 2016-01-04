@@ -16,6 +16,9 @@
                 url: 'upload.php',
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
             },
+            getUrlFromFileUploadResponse: function (data) {
+                return data.result.files[0].url;
+            },
             styles: {
                 wide: {
                     label: '<span class="fa fa-align-justify"></span>',
@@ -51,7 +54,7 @@
             // uploadCompleted: function ($el, data) {}
         };
 
-    var TEMPLATE_IMAGES_FILEUPLOAD = '<input type="file" multiple>';
+    var TEMPLATE_IMAGES_FILEUPLOAD = '<input type="file">';
     var TEMPLATE_IMAGES_IMAGE = '<img src="%IMG%" alt="">';
     var TEMPLATE_CORE_EMPTY_LINE = '<p><br></p>';
     var TEMPLATE_IMAGES_TOOLBAR = '' +
@@ -190,7 +193,13 @@
                 }
             };
 
-        $file.fileupload($.extend(true, {}, this.options.fileUploadOptions, fileUploadOptions));
+        var options = $.extend(true, {}, this.options.fileUploadOptions, fileUploadOptions);
+
+        if (typeof this.options.beforeFileUploadClick === 'function') {
+            this.options.beforeFileUploadClick(options);
+        }
+
+        $file.fileupload(options);
 
         $file.click();
     };
@@ -262,7 +271,7 @@
      */
 
     Images.prototype.uploadDone = function (e, data) {
-        var $el = $.proxy(this, 'showImage', data.result.files[0].url, data)();
+        var $el = $.proxy(this, 'showImage', getUrlFromFileUploadResponse(data), data)();
 
         this.core.clean();
 
