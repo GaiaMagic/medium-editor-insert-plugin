@@ -65,20 +65,6 @@
             <h4>What to do next?</h4>
 
             <p>Please, go to <a href="https://github.com/orthes/medium-editor-insert-plugin">our GitHub repository</a> for installation and configuration info. Did you find a bug, have an idea or want to contribute? Great! Do not miss our <a href="https://github.com/orthes/medium-editor-insert-plugin/issues">issues page on GitHub</a>.</p>
-
-            <h4>Contributors</h4>
-
-            <p>This plugin is brought to you thanks to these great contributors from all around the world:</p>
-
-            <div class="medium-insert-images medium-insert-images-grid small-grid">
-                <figure><img src="uploads/312938.jpg" alt=""></figure><figure><img src="uploads/19343.jpg" alt=""></figure><figure><img src="uploads/39333.jpg" alt=""></figure><figure><img src="uploads/1228229.jpg" alt=""></figure><figure><img src="uploads/594298.jpg" alt=""></figure><figure><img src="uploads/1101183.jpg" alt=""></figure><figure><img src="uploads/1790778.jpg" alt=""></figure><figure><img src="uploads/1270102.jpg" alt=""></figure><figure><img src="uploads/93555.png" alt=""></figure><figure><img src="uploads/1891369.jpg" alt=""></figure><figure><img src="uploads/1642674.png" alt=""></figure><figure><img src="uploads/431361.jpg" alt=""></figure><figure><img src="uploads/883073.jpg" alt=""></figure><figure><img src="uploads/1485056.jpg" alt=""></figure><figure><img src="uploads/1064889.jpg" alt=""></figure><figure><img src="uploads/62333.png" alt=""></figure><figure><img src="uploads/433501.jpg" alt=""></figure><figure><img src="uploads/714146.jpg" alt=""></figure><figure><img src="uploads/882228.jpg" alt=""></figure><figure><img src="uploads/28841.jpg" alt=""></figure>
-            </div>
-
-            <p><em>... And yes, you can create this nice images grid with the plugin. And much more...</em></p>
-
-            <h4>License</h4>
-
-            <p>The plugin is free and released under MIT license.</p>
         </div>
 
         <footer>
@@ -92,10 +78,6 @@
     <script src="../bower_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
     <script src="../bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="../bower_components/medium-editor/dist/js/medium-editor.js"></script>
-    <script src="../bower_components/jquery-sortable/source/js/jquery-sortable-min.js"></script>
-
-    <script src="../bower_components/jquery-cycle2/build/jquery.cycle2.min.js"></script>
-    <script src="../bower_components/jquery-cycle2/build/plugin/jquery.cycle2.center.min.js"></script>
 
     <!--<script src="../dist/js/medium-editor-insert-plugin.min.js"></script>-->
     <script src="../src/js/core.js"></script>
@@ -110,23 +92,7 @@
             $('.editable').mediumInsert({
                 editor: editor,
                 addons: {
-                    images: {
-                        styles: {
-                            slideshow: {
-                                label: '<span class="fa fa-play"></span>',
-                                added: function ($el) {
-                                    $el
-                                        .data('cycle-center-vert', true)
-                                        .cycle({
-                                            slides: 'figure'
-                                        });
-                                },
-                                removed: function ($el) {
-                                    $el.cycle('destroy');
-                                }
-                            }
-                        }
-                    }
+                    images: true
                 }
             });
         });

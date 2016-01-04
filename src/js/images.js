@@ -12,7 +12,6 @@
             deleteMethod: 'POST',
             deleteScript: 'delete.php',
             preview: true,
-            autoGrid: 3,
             fileUploadOptions: { // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                 url: 'upload.php',
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
@@ -32,11 +31,6 @@
                     label: '<span class="fa fa-align-right"></span>',
                     // added: function ($el) {},
                     // removed: function ($el) {}
-                },
-                grid: {
-                    label: '<span class="fa fa-th"></span>',
-                    // added: function ($el) {},
-                    // removed: function ($el) {}
                 }
             },
             actions: {
@@ -49,22 +43,6 @@
                         $(document).trigger($event);
                     }
                 }
-            },
-            sorting: function () {
-                var that = this;
-
-                $('.medium-insert-images').sortable({
-                    group: 'medium-insert-images',
-                    containerSelector: '.medium-insert-images',
-                    itemSelector: 'figure',
-                    placeholder: '<figure class="placeholder">',
-                    handle: 'img',
-                    nested: false,
-                    vertical: false,
-                    afterMove: function () {
-                        that.core.triggerInput();
-                    }
-                });
             },
             messages: {
                 acceptFileTypesError: 'This file is not in a supported format: ',
@@ -138,7 +116,6 @@
 
         this.events();
         this.backwardsCompatibility();
-        this.sorting();
     };
 
     /**
@@ -288,7 +265,6 @@
         var $el = $.proxy(this, 'showImage', data.result.files[0].url, data)();
 
         this.core.clean();
-        this.sorting();
 
         if (this.options.uploadCompleted) {
             this.options.uploadCompleted($el, data);
@@ -324,24 +300,6 @@
             data.context = $(TEMPLATE_IMAGES_IMAGE.replace('%IMG%', img)).appendTo($place);
 
             $place.find('br').remove();
-
-            if (this.options.autoGrid && $place.find('figure').length >= this.options.autoGrid) {
-                $.each(this.options.styles, function (style, options) {
-                    var className = 'medium-insert-images-'+ style;
-
-                    $place.removeClass(className);
-
-                    if (options.removed) {
-                        options.removed($place);
-                    }
-                });
-
-                $place.addClass('medium-insert-images-grid');
-
-                if (this.options.styles.grid.added) {
-                    this.options.styles.grid.added($place);
-                }
-            }
 
             if (this.options.preview) {
                 data.submit();
@@ -574,16 +532,6 @@
         this.core.hideButtons();
 
         this.core.triggerInput();
-    };
-
-    /**
-     * Initialize sorting
-     *
-     * @returns {void}
-     */
-
-    Images.prototype.sorting = function () {
-        $.proxy(this.options.sorting, this)();
     };
 
     /** Plugin initialization */
