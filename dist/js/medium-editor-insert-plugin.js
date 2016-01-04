@@ -597,9 +597,6 @@
             getUrlFromFileUploadResponse: function (data) {
                 return data.result.files[0].url;
             },
-            beforeImageAdd: function () {
-                return 'asdf';
-            },
             styles: {
                 wide: {
                     label: '<span class="fa fa-align-justify"></span>',
@@ -635,7 +632,7 @@
             // uploadCompleted: function ($el, data) {}
         };
 
-    var TEMPLATE_IMAGES_FILEUPLOAD = '<input type="file" multiple>';
+    var TEMPLATE_IMAGES_FILEUPLOAD = '<input type="file">';
     var TEMPLATE_IMAGES_IMAGE = '<img src="%IMG%" alt="">';
     var TEMPLATE_CORE_EMPTY_LINE = '<p><br></p>';
     var TEMPLATE_IMAGES_TOOLBAR = '' +
@@ -762,23 +759,27 @@
      */
 
     Images.prototype.add = function () {
-        var that = this;
-        $.when(that.options.beforeImageAdd()).then(function (additionalUploadOptions) {
-            var $file = $(TEMPLATE_IMAGES_FILEUPLOAD),
-                fileUploadOptions = {
-                    dataType: 'json',
-                    add: function (e, data) {
-                        $.proxy(that, 'uploadAdd', e, data)();
-                    },
-                    done: function (e, data) {
-                        $.proxy(that, 'uploadDone', e, data)();
-                    }
-                };
+        var that = this,
+            $file = $(TEMPLATE_IMAGES_FILEUPLOAD),
+            fileUploadOptions = {
+                dataType: 'json',
+                add: function (e, data) {
+                    $.proxy(that, 'uploadAdd', e, data)();
+                },
+                done: function (e, data) {
+                    $.proxy(that, 'uploadDone', e, data)();
+                }
+            };
 
-            $file.fileupload($.extend(true, {}, that.options.fileUploadOptions, fileUploadOptions, additionalUploadOptions));
+        var options = $.extend(true, {}, this.options.fileUploadOptions, fileUploadOptions);
 
-            $file.click();
-        });
+        if (typeof this.options.beforeFileUploadClick === 'function') {
+            this.options.beforeFileUploadClick(options);
+        }
+
+        $file.fileupload(options);
+
+        $file.click();
     };
 
     /**
