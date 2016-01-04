@@ -1,0 +1,16 @@
+{
+  "name": "medium-editor-insert-plugin",
+  "version": "3.0.0",
+  "description": "jQuery insert plugin for MediumEditor",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-autoprefixer": "^3.0.1",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-uglify": "~0.9.1",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-csso": "^0.7.0",
+    "grunt-sass": "~1.1.0",
+    "jit-grunt": "^0.9.1"
+  }
+}
