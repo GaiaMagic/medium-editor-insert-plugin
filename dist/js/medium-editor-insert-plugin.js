@@ -849,7 +849,7 @@
      */
 
     Images.prototype.uploadDone = function (e, data) {
-        var $el = $.proxy(this, 'showImage', getUrlFromFileUploadResponse(data), data)();
+        var $el = $.proxy(this, 'showImage', this.options.getUrlFromFileUploadResponse(data), data)();
 
         this.core.clean();
 
