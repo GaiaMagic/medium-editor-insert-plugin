@@ -8,10 +8,18 @@
             editor: null,
             enabled: true,
             addons: {
-                images: true, // boolean or object containing configuration
-                embeds: true
+                images: true // boolean or object containing configuration
             }
         };
+
+    var TEMPLATE_CORE_EMPTY_LINE = '<p><br></p>';
+    var TEMPLATE_CORE_BUTTONS = '' +
+        '<div class="medium-insert-buttons" contenteditable="false" style="display: none">' +
+        '    <a class="medium-insert-buttons-show">+</a>' +
+        '    <ul class="medium-insert-buttons-addons" style="display: none">' +
+        '        <li><a data-addon="images" data-action="add" class="medium-insert-action"><span class="fa fa-camera"></span></a></li>' +
+        '    </ul>' +
+        '</div>';
 
     /**
      * Capitalize first character
@@ -40,7 +48,6 @@
 
         this.el = el;
         this.$el = $(el);
-        this.templates = window.MediumInsert.Templates;
 
         if (options) {
             // Fix #142
@@ -104,10 +111,7 @@
             .on('keyup click', $.proxy(this, 'toggleButtons'))
             .on('selectstart mousedown', '.medium-insert, .medium-insert-buttons', $.proxy(this, 'disableSelection'))
             .on('click', '.medium-insert-buttons-show', $.proxy(this, 'toggleAddons'))
-            .on('click', '.medium-insert-action', $.proxy(this, 'addonAction'))
-            .on('paste', '.medium-insert-caption-placeholder', function (e) {
-                $.proxy(that, 'removeCaptionPlaceholder')($(e.target));
-            });
+            .on('click', '.medium-insert-action', $.proxy(this, 'addonAction'));
 
         $(window).on('resize', $.proxy(this, 'positionButtons', null));
     };
@@ -298,7 +302,7 @@
         // To force placeholder to appear, set <p><br></p> as content of the $el
 
         if (this.$el.html().trim() === '' || this.$el.html().trim() === '<br>') {
-            this.$el.html(this.templates['src/js/templates/core-empty-line.hbs']().trim());
+            this.$el.html(TEMPLATE_CORE_EMPTY_LINE);
         }
 
         // Fix #29
@@ -322,7 +326,7 @@
         $buttons = this.$el.find('.medium-insert-buttons');
         $lastEl = $buttons.prev();
         if ($lastEl.attr('class') && $lastEl.attr('class').match(/medium\-insert(?!\-active)/)) {
-            $buttons.before(this.templates['src/js/templates/core-empty-line.hbs']().trim());
+            $buttons.before(TEMPLATE_CORE_EMPTY_LINE);
         }
     };
 
@@ -337,9 +341,7 @@
             return;
         }
 
-        return this.templates['src/js/templates/core-buttons.hbs']({
-            addons: this.options.addons
-        }).trim();
+        return TEMPLATE_CORE_BUTTONS;
     };
 
     /**
@@ -547,62 +549,6 @@
         range.collapse(true);
         sel.removeAllRanges();
         sel.addRange(range);
-    };
-
-    /**
-     * Add caption
-     *
-     * @param {jQuery Element} $el
-     * @param {string} placeholder
-     * @return {void}
-     */
-
-    Core.prototype.addCaption = function ($el, placeholder) {
-        var $caption = $el.find('figcaption');
-
-        if ($caption.length === 0) {
-            $el.append(this.templates['src/js/templates/core-caption.hbs']({
-                placeholder: placeholder
-            }));
-        }
-    };
-
-    /**
-     * Remove captions
-     *
-     * @param {jQuery Element} $ignore
-     * @return {void}
-     */
-
-    Core.prototype.removeCaptions = function ($ignore) {
-        var $captions = this.$el.find('figcaption');
-
-        if ($ignore) {
-            $captions = $captions.not($ignore);
-        }
-
-        $captions.each(function () {
-            if ($(this).hasClass('medium-insert-caption-placeholder') || $(this).text().trim() === '') {
-                $(this).remove();
-            }
-        });
-    };
-
-    /**
-     * Remove caption placeholder
-     *
-     * @param {jQuery Element} $el
-     * @return {void}
-     */
-
-    Core.prototype.removeCaptionPlaceholder = function ($el) {
-        var $caption = $el.is('figcaption') ? $el : $el.find('figcaption');
-
-        if ($caption.length) {
-            $caption
-                .removeClass('medium-insert-caption-placeholder')
-                .removeAttr('data-placeholder');
-        }
     };
 
     /** Plugin initialization */
